@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+        />
+
+        <title>Covid19</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
+            rel="stylesheet"
+        />
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"
+            integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        ></script>
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <div class="container">
+            <header id="header">
+                <section class="left-menu">
+                    <span class="material-symbols-outlined"> coronavirus </span>
+                    <h1>Covid 19</h1>
+                </section>
+                <section class="right-menu">
+                    <ul id="menu">
+                        <li><a href="#">Berita</a></li>
+                        <li><a href="#">Sebaran</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">About</a></li>
+                    </ul>
+                </section>
+            </header>
+            <section id="main">
+                <div class="title">
+                    <h2>INDONESIA</h2>
+                    <p>Data Persebaran Covid-19 di Indonesia</p>
+                </div>
+                <hr />
+                <div class="content">
+                    <p id="last">Terakhir diperbarui:</p>
+
+                    <div class="data">
+                        <div class="box">
+                            <p id="jumlah_positif">0</p>
+                            <span>Terkonfirmasi</span>
+                        </div>
+                        <div class="box">
+                            <p id="jumlah_dirawat">0</p>
+                            <span>Dalam Perawatan</span>
+                        </div>
+                        <div class="box">
+                            <p id="jumlah_sembuh">0</p>
+                            <span>Sembuh</span>
+                        </div>
+                        <div class="box">
+                            <p id="jumlah_meninggal">0</p>
+                            <span>Meninggal</span>
+                        </div>
+                    </div>
+                    <div class="statistik">
+                        <div class="section-statistik">
+                            <h2>Statistik Kasus</h2>
+                            <p>
+                                Sumber: covid19.go.id / Last update: 26 Oktober
+                                2022
+                            </p>
+                            <hr />
+                            <div class="statistik-box">
+                                <canvas id="myChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="section-statistik">
+                            <h2>Statistik Kasus</h2>
+                            <p>
+                                Sumber: covid19.go.id / Last update: 26 Oktober
+                                2022
+                            </p>
+                            <hr />
+                            <div class="statistik-box">
+                                <canvas id="myChart1"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <script src="app.js"></script>
+    </body>
+</html>
