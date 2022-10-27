@@ -5,37 +5,26 @@ const positif = document.querySelector("#jumlah_positif");
 const dirawat = document.querySelector("#jumlah_dirawat");
 const sembuh = document.querySelector("#jumlah_sembuh");
 const meninggal = document.querySelector("#jumlah_meninggal");
-const result = {};
-const years = [];
-const month = [
-    "Januari",
-    "Februari",
-    "Maret",
-    "April",
-    "Mei",
-    "Juni",
-    "Juli",
-    "Agustus",
-    "September",
-    "Oktober",
-    "November",
-    "Desember",
-];
-
+const result = [];
+const month = [];
 function numFormat(value) {
     return value.toLocaleString();
 }
 
-function getDateTime(result) {
-    let year = [];
-    for (let month of result) {
-        const d = new Date(month.key_as_string.toLocaleString());
-        year.push(d.getFullYear());
-    }
-    let uniqYear = [...new Set(year)];
-    years.push(...uniqYear);
-}
-console.log(years);
+// function filterDateTime(result) {
+//     let year = [];
+//     // let month = [];
+//     for (let date of result) {
+//         const d = new Date(date.key_as_string.toLocaleString());
+//         year.push(d.getFullYear());
+//         // month.push(d.getMonth());
+//     }
+//     let uniqYear = [...new Set(year)];
+//     // let uniqMonth = [...new Set(month)];
+//     years["years"] = [...uniqYear];
+//     // months.push(...uniqMonth);
+// }
+
 const fetchTotalCovid = async () => {
     try {
         const res = await fetch(`${baseUrl}`);
@@ -45,18 +34,63 @@ const fetchTotalCovid = async () => {
         sembuh.textContent = numFormat(update.total.jumlah_sembuh);
         meninggal.textContent = numFormat(update.total.jumlah_meninggal);
         Object.assign(result, update);
-        getDateTime(result.harian);
+        // filterDateTime(result.harian);
+        totalFiltered(result);
     } catch (e) {
         return e.message;
     }
 };
 
-fetchTotalCovid();
+const getDayInMonth = (year, month) => {
+    return new Date(year, month, 0).getDate();
+};
+
+const totalFiltered = (result) => {
+    let datas = [];
+    for (let i = 0; i < result.harian.length; i++) {
+        let date = new Date(result.harian[i].key_as_string);
+        if (
+            date.getDate() <=
+            getDayInMonth(date.getFullYear(), date.getMonth() + 1)
+        ) {
+            if (date.getFullYear() === date.getFullYear()) {
+                datas[
+                    date.toLocaleString("id-ID", { month: "long" }) +
+                        " " +
+                        date.getFullYear() +
+                        " jumlah_positif"
+                ] = result.harian[i].jumlah_positif.value;
+                datas[
+                    date.toLocaleString("id-ID", { month: "long" }) +
+                        " " +
+                        date.getFullYear() +
+                        " jumlah_meninggal"
+                ] = result.harian[i].jumlah_meninggal.value;
+                datas[
+                    date.toLocaleString("id-ID", { month: "long" }) +
+                        " " +
+                        date.getFullYear() +
+                        " jumlah_sembuh"
+                ] = result.harian[i].jumlah_sembuh.value;
+                datas[
+                    date.toLocaleString("id-ID", { month: "long" }) +
+                        " " +
+                        date.getFullYear() +
+                        " jumlah_dirawat"
+                ] = result.harian[i].jumlah_dirawat.value;
+            }
+        }
+    }
+    month.push(datas);
+    console.log(month);
+};
+
+console.log(fetchTotalCovid());
 const ctx = document.getElementById("myChart");
 const myChart = new Chart(ctx, {
     type: "line",
     data: {
-        labels: month,
+        labels: [1, 2, 4, 5, 6, 7, 8, 9, 10],
         datasets: [
             {
                 label: "Positif",
