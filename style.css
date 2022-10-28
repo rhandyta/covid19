@@ -255,12 +255,14 @@ h2 {
     font-weight: 600;
     margin-bottom: 7px;
 }
+
 .statistik {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     flex-wrap: wrap;
 }
+
 .section-statistik {
     width: 48%;
 }
@@ -282,6 +284,14 @@ h2 {
 }
 
 @media (max-width: 727px) {
+    #header {
+        justify-content: center;
+    }
+
+    .right-menu #menu {
+        display: none;
+    }
+
     .data {
         justify-content: center;
     }
