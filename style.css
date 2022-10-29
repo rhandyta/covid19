@@ -267,6 +267,11 @@ h2 {
     width: 48%;
 }
 
+.section-statistik p {
+    font-size: 0.8rem;
+    margin: 5px 0;
+}
+
 .statistik-box {
     margin-bottom: 50px;
 }
