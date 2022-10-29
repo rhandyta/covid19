@@ -5,7 +5,10 @@ const positif = document.querySelector("#jumlah_positif");
 const dirawat = document.querySelector("#jumlah_dirawat");
 const sembuh = document.querySelector("#jumlah_sembuh");
 const meninggal = document.querySelector("#jumlah_meninggal");
-const lastUpdated = document.querySelector("#kasus");
+const lastUpdatedKasus = document.querySelector("#kasus");
+const lastUpdatedVaksin = document.querySelector("#vaksin");
+const vaksin1 = document.querySelector("#vaksin1");
+const vaksin2 = document.querySelector("#vaksin2");
 const year = new Date();
 const result = [];
 const month = [];
@@ -41,13 +44,14 @@ const fetchTotalCovid = async () => {
         dirawat.textContent = numFormat(update.total.jumlah_dirawat);
         sembuh.textContent = numFormat(update.total.jumlah_sembuh);
         meninggal.textContent = numFormat(update.total.jumlah_meninggal);
-        lastUpdated.textContent = `Sumber: covid19.go.id / Selamat tahun: ${year.getFullYear()} / Last update: ${
+        lastUpdatedKasus.textContent = `Sumber: covid19.go.id / Selama tahun: ${year.getFullYear()} / Last update: ${
             update.penambahan.tanggal
         }`;
         Object.assign(result, update);
         // filterDateTime(result.harian);
         totalFiltered(result.harian);
     } catch (e) {
+        console.log(e.message);
         return e.message;
     }
 };
@@ -107,10 +111,6 @@ const totalFiltered = async (result) => {
 
         return acc;
     }, {});
-    console.log("meninggal => ", sumPerMonthMeninggal);
-    console.log("dirawat => ", sumPerMonthDirawat);
-    console.log("sembuh => ", sumPerMonthSembuh);
-    console.log("positif => ", sumPerMonthPositif);
     const monthNum = Object.keys(sumPerMonthPositif);
     const monthNumPlusOne = [];
     const monthResult = [];
@@ -207,42 +207,97 @@ const totalFiltered = async (result) => {
 //     month.push(datas);
 //     console.log(month);
 // };
-fetchTotalCovid();
 
-const ctx1 = document.getElementById("myChart1");
-const myChart1 = new Chart(ctx1, {
-    type: "line",
-    data: {
-        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-        datasets: [
-            {
-                label: "# of Votes",
-                data: [12, 19, 3, 5, 2, 3],
-                backgroundColor: [
-                    "rgba(255, 99, 132, 0.2)",
-                    "rgba(54, 162, 235, 0.2)",
-                    "rgba(255, 206, 86, 0.2)",
-                    "rgba(75, 192, 192, 0.2)",
-                    "rgba(153, 102, 255, 0.2)",
-                    "rgba(255, 159, 64, 0.2)",
+const fetchTotalVaksin = async () => {
+    try {
+        let response = await fetch("http://localhost:3001/vaksinasi");
+        let data = await response.json();
+        vaksin1.textContent = numFormat(data.total.jumlah_vaksinasi_1);
+        vaksin2.textContent = numFormat(data.total.jumlah_vaksinasi_2);
+        let { harian } = data;
+        lastUpdatedVaksin.textContent = `Sumber: covid19.go.id / Selama tahun: ${year.getFullYear()} / Last update: ${
+            data.penambahan.tanggal
+        }`;
+        const collection = harian.map((x) => ({
+            ...x,
+            day: new Date(x.key_as_string).toISOString().split("T")[0],
+            jumlah_vaksinasi_1: Number(x.jumlah_vaksinasi_1.value),
+            jumlah_vaksinasi_2: Number(x.jumlah_vaksinasi_2.value),
+        }));
+
+        const mapDayToMonth = collection.map((x) => ({
+            ...x,
+            day: new Date(x.day).getMonth(),
+            year: new Date(x.key_as_string).getFullYear(),
+        }));
+
+        const sumPerMonthVaksin1 = mapDayToMonth.reduce((acc, cur) => {
+            let year = new Date();
+            if (cur.year === year.getFullYear()) {
+                acc[cur.day] =
+                    acc[cur.day] + cur.jumlah_vaksinasi_1 ||
+                    cur.jumlah_vaksinasi_1;
+            }
+
+            return acc;
+        }, {});
+        const sumPerMonthVaksin2 = mapDayToMonth.reduce((acc, cur) => {
+            let year = new Date();
+            if (cur.year === year.getFullYear()) {
+                acc[cur.day] =
+                    acc[cur.day] + cur.jumlah_vaksinasi_2 ||
+                    cur.jumlah_vaksinasi_2;
+            }
+
+            return acc;
+        }, {});
+        const monthNum = Object.keys(sumPerMonthVaksin1);
+        const monthNumPlusOne = [];
+        const monthResult = [];
+        for (let j = 0; j < monthNum.length; j++) {
+            monthNumPlusOne.push(parseInt(monthNum[j]) + 1);
+        }
+        for (let i = 0; i < monthNum.length; i++) {
+            let montthhhh = new Date(`${monthNumPlusOne[i]}`);
+            monthResult.push(
+                montthhhh.toLocaleString("id-ID", { month: "long" })
+            );
+        }
+        const ctx1 = document.getElementById("myChart1");
+        new Chart(ctx1, {
+            type: "line",
+            data: {
+                labels: monthResult,
+                datasets: [
+                    {
+                        label: "Vaksinasi Dosis I",
+                        data: Object.values(sumPerMonthVaksin1),
+                        backgroundColor: ["rgb(235, 52, 52)"],
+                        borderColor: ["rgb(235, 52, 52)"],
+                        borderWidth: 1,
+                    },
+                    {
+                        label: "Vaksinasi Dosis II",
+                        data: Object.values(sumPerMonthVaksin2),
+                        backgroundColor: ["rgb(52, 70, 235)"],
+                        borderColor: ["rgb(52, 70, 235)"],
+                        borderWidth: 1,
+                    },
                 ],
-                borderColor: [
-                    "rgba(255, 99, 132, 1)",
-                    "rgba(54, 162, 235, 1)",
-                    "rgba(255, 206, 86, 1)",
-                    "rgba(75, 192, 192, 1)",
-                    "rgba(153, 102, 255, 1)",
-                    "rgba(255, 159, 64, 1)",
-                ],
-                borderWidth: 1,
             },
-        ],
-    },
-    options: {
-        scales: {
-            y: {
-                beginAtZero: true,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                    },
+                },
             },
-        },
-    },
-});
+        });
+    } catch (error) {
+        console.log(error);
+        return error;
+    }
+};
+
+fetchTotalCovid();
+fetchTotalVaksin();
