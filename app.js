@@ -5,6 +5,8 @@ const positif = document.querySelector("#jumlah_positif");
 const dirawat = document.querySelector("#jumlah_dirawat");
 const sembuh = document.querySelector("#jumlah_sembuh");
 const meninggal = document.querySelector("#jumlah_meninggal");
+const lastUpdated = document.querySelector("#kasus");
+const year = new Date();
 const result = [];
 const month = [];
 const obj1 = {};
@@ -39,6 +41,9 @@ const fetchTotalCovid = async () => {
         dirawat.textContent = numFormat(update.total.jumlah_dirawat);
         sembuh.textContent = numFormat(update.total.jumlah_sembuh);
         meninggal.textContent = numFormat(update.total.jumlah_meninggal);
+        lastUpdated.textContent = `Sumber: covid19.go.id / Selamat tahun: ${year.getFullYear()} / Last update: ${
+            update.penambahan.tanggal
+        }`;
         Object.assign(result, update);
         // filterDateTime(result.harian);
         totalFiltered(result.harian);
