@@ -76,7 +76,7 @@ const totalFiltered = async (result) => {
     }));
 
     const sumPerMonthPositif = mapDayToMonth.reduce((acc, cur) => {
-        let year = new Date();
+        let year = new Date("2022"); // mendapatkan nilai sesuai dengan tahun sekarang
         if (cur.year === year.getFullYear()) {
             acc[cur.day] =
                 acc[cur.day] + cur.jumlah_positif || cur.jumlah_positif;
@@ -232,17 +232,16 @@ const fetchTotalVaksin = async () => {
         }));
 
         const sumPerMonthVaksin1 = mapDayToMonth.reduce((acc, cur) => {
-            let year = new Date();
+            let year = new Date("2022"); // nilai sesuai tahun sekarang
             if (cur.year === year.getFullYear()) {
                 acc[cur.day] =
                     acc[cur.day] + cur.jumlah_vaksinasi_1 ||
                     cur.jumlah_vaksinasi_1;
             }
-
             return acc;
         }, {});
         const sumPerMonthVaksin2 = mapDayToMonth.reduce((acc, cur) => {
-            let year = new Date();
+            let year = new Date("2022"); // nilai sesuai tahun sekarang
             if (cur.year === year.getFullYear()) {
                 acc[cur.day] =
                     acc[cur.day] + cur.jumlah_vaksinasi_2 ||
